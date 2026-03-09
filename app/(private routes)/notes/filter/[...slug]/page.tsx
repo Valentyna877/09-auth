@@ -9,20 +9,19 @@ import NotesClient from "./Notes.client";
 import type { NoteTag } from "@/types/note";
 
 interface NotesPageProps {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }
 
 export async function generateMetadata({ params }: NotesPageProps): Promise<Metadata> {
-  const tag = params.slug?.[0] ?? "all";
-  const capitalizedTag = tag.charAt(0).toUpperCase() + tag.slice(1);
-
+  const { slug } = await params;
+  const tag = slug[0];
   return {
-    title: `${capitalizedTag} Notes | NoteHub`,
-    description: `Browse notes tagged with: ${capitalizedTag}.`,
+    title: `${tag} note `,
+    description: `Browse notes tagged with: ${tag}.`,
     openGraph: {
-      title: `${capitalizedTag} Notes | NoteHub`,
-      description: `Browse notes tagged with: ${capitalizedTag}.`,
-      url: `/notes/filter/${tag}`,
+      title: `Note ${tag}`,
+      description: `Browse notes tagged with: ${tag}.`,
+      url: `https://08-zustand-qm6st2in3-valentynas-projects-4bb1e270.vercel.app/notes/filter/${tag}`,
       images: [
         {
           url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
@@ -36,16 +35,15 @@ export async function generateMetadata({ params }: NotesPageProps): Promise<Meta
 }
 
 export default async function NotesPage({ params }: NotesPageProps) {
-  const tag = params.slug?.[0] ?? "all";
+  const { slug } = await params;
+  const tag = slug?.[0];
 
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: ["notes", "", 1, tag],
-    queryFn: async () => {
-      const notes = await fetchNotes(1, 12, tag === "all" ? undefined : (tag as NoteTag));
-      return notes;
-    }
+    queryFn: () =>
+      fetchNotes(1, 12, tag === "all" ? undefined : (tag as NoteTag)),
   });
 
   return (

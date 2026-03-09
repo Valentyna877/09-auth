@@ -2,6 +2,8 @@
 //     return <p>Loading, please wait...</p>;
 // }
 
+"use client";
+
 import css from "@/components/Loader/Loader.module.css";
 
 export default function Loader({ message = "Loading, please wait..." }) {

@@ -30,7 +30,7 @@ export default function SignInPage() {
   return (
     <main className={css.mainContent}>
       <form className={css.form} onSubmit={handleSubmit}>
-        <h1 className={css.formTitle}>Sign in</h1>
+        <h1 className={css.formTitle}>Sign In</h1>
         <div className={css.formGroup}>
           <label htmlFor="email">Email</label>
           <input id="email" type="email" name="email" className={css.input} required />
@@ -40,7 +40,7 @@ export default function SignInPage() {
           <input id="password" type="password" name="password" className={css.input} required />
         </div>
         <div className={css.actions}>
-          <button type="submit" className={css.submitButton}>Log in</button>
+          <button type="submit" className={css.submitButton}>Log In</button>
         </div>
         {error && <p className={css.error}>{error}</p>}
       </form>

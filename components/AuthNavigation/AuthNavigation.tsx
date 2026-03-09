@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/lib/store/authStore";
 import { logout } from "@/lib/api/clientApi";
 import css from "./AuthNavigation.module.css";
 
 export default function AuthNavigation() {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
 
   const handleLogout = async () => {
@@ -25,27 +26,39 @@ export default function AuthNavigation() {
       {isAuthenticated ? (
         <>
           <li className={css.navigationItem}>
-            <Link href="/profile" prefetch={false} className={css.navigationLink}>
+            <Link
+              href="/profile"
+              prefetch={false}
+              className={`${css.navigationLink} ${pathname === "/profile" ? css.active : ""
+                }`}>
               Profile
             </Link>
           </li>
           <li className={css.navigationItem}>
-            <p className={css.userEmail}>{user?.email}</p>
+            <p className={css.userEmail}>{user?.username ? user.username : user?.email}</p>
             <button onClick={handleLogout} className={css.logoutButton}>
-              Logout
+              LogOut
             </button>
           </li>
         </>
       ) : (
         <>
           <li className={css.navigationItem}>
-            <Link href="/sign-in" prefetch={false} className={css.navigationLink}>
-              Login
+              <Link
+                href="/sign-in"
+                prefetch={false}
+                className={`${css.navigationLink} ${pathname === "/sign-in" ? css.active : ""
+                  }`}>
+              LogIn
             </Link>
           </li>
           <li className={css.navigationItem}>
-            <Link href="/sign-up" prefetch={false} className={css.navigationLink}>
-              Sign up
+              <Link
+                href="/sign-up"
+                prefetch={false}
+                className={`${css.navigationLink} ${pathname === "/sign-up" ? css.active : ""
+                  }`}>
+              Sign Up
             </Link>
           </li>
         </>

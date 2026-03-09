@@ -22,3 +22,8 @@
   background-color: #444;
   color: #ddd;
 }
+
+.menuLink:focus {
+  color: #ff9000;
+  font-weight: bold;
+}

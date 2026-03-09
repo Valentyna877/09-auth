@@ -39,3 +39,9 @@
 .navigationLink:hover {
   color: #ddd;
 }
+
+.navigationLink.active {
+  font-weight: bold;
+  /* text-decoration: underline; */
+  color: #ff9000;
+}

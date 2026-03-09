@@ -9,8 +9,8 @@ import Pagination from '@/components/Pagination/Pagination';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import css from './NotesPage.module.css';
 import { fetchNotes } from "@/lib/api/clientApi";
-import type { FetchNotesResponse, NoteTag } from "@/types/note";
 import { useDebouncedCallback } from 'use-debounce';
+import type { FetchNotesResponse, NoteTag } from "@/types/note";
 import Link from "next/link";
 
 interface NotesClientProps {
@@ -26,25 +26,20 @@ export default function NotesClient({ tag }: NotesClientProps) {
     setPage(1);
   }, 500);
 
-  const { data, isLoading, isError } = useQuery<FetchNotesResponse>({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["notes", query, page, tag],
-    queryFn: async () => {
-      return await fetchNotes(
-        page,
-        12,
-        tag === "all" ? undefined : (tag as NoteTag),
-        query
-      );
+    queryFn: () => fetchNotes( page, 12, tag === "all" ? undefined : (tag as NoteTag), query),
+    placeholderData: (prev: FetchNotesResponse | undefined) => {
+     return page > 1 ? prev : undefined;
     },
-    placeholderData: (prev) => (page > 1 ? prev : undefined),
-  });
     // placeholderData: keepPreviousData,
     // keepPreviousData: true,
     // refetchOnWindowFocus: false,
+  });
 
-  const notes = data?.notes ?? [];
-  const totalPages = data?.totalPages ?? 0;
-    // const { notes = [], totalPages = 0 } = data ?? {}
+  // const notes = data?.notes ?? [];
+  // const totalPages = data?.totalPages ?? 0;
+    const { notes = [], totalPages = 0 } = data ?? {}
 
   return (
     <div className={css.app}>
